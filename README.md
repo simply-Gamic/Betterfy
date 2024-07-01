@@ -24,7 +24,7 @@ Some of the bigger ideas I have for this project:
 - *Completely* random shuffle option
 - *Completely* random song choice option
 - Controlling Spotify playlists through the WEB API and making it easier to create them
-- Option to build a Spotify Connect device in a browser or on a wifi enabled machine (tries to emulate the Spotify CarThing)
+- Option to build a Spotify Connect device in a browser or on a wifi enabled machine (tries to emulate the Spotify CarThing) --> basically: build your own Spotify UI layout
 - Using Audioanalysis to display detailed song details (BPM, Key, Instrumentalisation etc.) in a easy to read format
 - Using Audioanalysis to build a metronome for the current song (and also sync that up to leds to for example have a visual metronome on a rgb midi piano)
 - Maybe migrate from python to a faster language in the future if I encounter any problems with performance
