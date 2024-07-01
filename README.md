@@ -31,6 +31,7 @@ Some of the bigger ideas I have for this project:
 - Integrate DMX control into Spotify to be able to link moving heads and the like to a Spotify instance
 - many, many more things that float around in my head
 
+Track what I'm currently working on [here](https://github.com/users/simply-Gamic/projects/1/views/1)
 
 ## Example
 Really barebones use of the library to first log in to the Spotify API on behalf of a user with the default Oauth flow and default scopes. Then it continously prints out the current song position of the currently playing song.
