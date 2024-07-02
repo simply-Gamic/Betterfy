@@ -11,6 +11,10 @@ If you answered yes to any of these questions `Betterfy` might be for you. Born 
 I have quiet a lot of ideas for this whole thing and I'm just at the beginning, so for now I'm focusing on the basics. Once I have a working basis I'll expand the project. 
 
 
+## Really early UI Layout and function (v0.1)
+Here's the app in action (well at least a really early barebones version of it) to give a slight idea of how it will work and look like.
+![gif](https://github.com/simply-Gamic/Betterfy/assets/80588359/9b364bfd-4ae4-474d-8d58-71ce633d41bb)
+
 ## To Do
 - Finish the authentication flow to be fully automatic
 - Migrate the basic UI I created (which can control Spotify through the WEB API) from html to a basic Tkinter UI
