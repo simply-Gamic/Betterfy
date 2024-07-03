@@ -30,37 +30,34 @@ class WledRealtimeClient:
             for i in range(0, self.num_pixels):
                 custom.extend(self.green)
         self._sock.sendto(custom, (self.wled_controller_ip, self.udp_port))
-        print("----------------------------------------------------------------------------------------------------------------------------------------- \nSend: " + str(custom), end="\n")
 
 
 def blink_blue():
     GUI.title.configure(text="Blinking blue now!")
     GUI.title.update()
-    wled = WledRealtimeClient(WLED_CONTROLLER_IP, NUM_PIXELS)
-    t_end = time.time() + 60 * 0.01
-    while time.time() < t_end:
-        wled.update("blue")
+    update("blue")
     GUI.title.configure(text="Finished Test!")
 
 
 def blink_red():
     GUI.title.configure(text="Blinking red now!")
     GUI.title.update()
-    wled = WledRealtimeClient(WLED_CONTROLLER_IP, NUM_PIXELS)
-    t_end = time.time() + 60 * 0.01
-    while time.time() < t_end:
-        wled.update("red")
+    update("red")
     GUI.title.configure(text="Finished Test!")
 
 
 def blink_green():
     GUI.title.configure(text="Blinking green now!")
     GUI.title.update()
+    update("green")
+    GUI.title.configure(text="Finished Test!")
+
+
+def update(color):
     wled = WledRealtimeClient(WLED_CONTROLLER_IP, NUM_PIXELS)
     t_end = time.time() + 60 * 0.01
     while time.time() < t_end:
-        wled.update("green")
-    GUI.title.configure(text="Finished Test!")
+        wled.update(color)
 
 
 class GUI:
