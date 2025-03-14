@@ -1,18 +1,15 @@
 import os
-import requests
+import Betterfy
 import time
 from datetime import datetime
-from authflow import auth
 
-token = auth()
-header = {"Authorization": "Bearer " + f"{token}"}
+token = Betterfy.authenticate()
 time.sleep(5)
 os.system('CLS||clear')
 
 while True:
-    r2 = requests.get('https://api.spotify.com/v1/me/player', headers=header, stream=True)
-    resp_json = r2.json()
-    track_name = r2.json()['item']['name']
+    resp_json = Betterfy.current_track(token)
+    track_name = resp_json['item']['name']
     track_id = resp_json['item']['id']
     timestamp = resp_json['timestamp']
     duration = resp_json['item']['duration_ms']
