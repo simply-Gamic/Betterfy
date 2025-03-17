@@ -1,7 +1,7 @@
 {"Betterfy": {
     "creds": {
         "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        "scopes": "user-read-private user-read-email user-read-playback-state",
+        "scopes": "user-read-private user-read-email user-read-playback-state user-modify-playback-state user-library-modify user-top-read playlist-modify-public playlist-modify-private user-follow-modify",
         "redirect": "http://127.0.0.1:8000/callback/",
         "authUrl": "https://accounts.spotify.com/authorize",
         "tokenUrl": "https://accounts.spotify.com/api/token",
