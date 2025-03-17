@@ -57,28 +57,27 @@ Song name: songtitle
 <br/>
 
 ```python
-import Betterfy
-
-# Get API token 
-token = Betterfy.authenticate()
-
 # print out last 5 saved songs of the user, skipping the newest 10 --> so song number 10 to 15 from the users saved songs
-print(Betterfy.get_saved_tracks(token, limit=5, offset=10))
+limit = 5
+offset = 10
+tracks = Betterfy.get_saved_tracks(token, limit=limit, offset=offset)
+
+for _ in range(limit):
+    print(f"{_+1+offset}. {tracks[_]}")
 ```
 
 Output:
 ```
-songtitle | artist, songtitle | artist, songtitle | artist, songtitle | artist, songtitle | artist
+11. songtitle | artist
+12. songtitle | artist
+13. songtitle | artist
+14. songtitle | artist
+15. songtitle | artist
 ```
 <br/>
 <br/>
 
 ```python
-import Betterfy
-
-# Get API token 
-token = Betterfy.authenticate()
-
 # skip to the next song
 Betterfy.next(token)
 ```
