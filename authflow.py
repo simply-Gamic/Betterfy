@@ -19,7 +19,8 @@ def create_enums():
         enums.tokenUrl = data["Betterfy"]["creds"]["tokenUrl"]
         enums.scope = data["Betterfy"]["creds"]["scopes"]
         enums.grant = data["Betterfy"]["creds"]["grant"]
-        #enums.headers = data["Betterfy"]["creds"]["headers"]
+        enums.refreshGrant = data["Betterfy"]["creds"]["refreshGrant"]
+        # enums.headers = data["Betterfy"]["creds"]["headers"]
         enums.authUrl = data["Betterfy"]["creds"]["authUrl"]
 
 
@@ -92,6 +93,15 @@ def get_token():
     enums.token_resp = parse_response(response.content)
 
 
+def refresh_token():
+    body = (
+        f"&grant_type={enums.refreshGrant}"
+        f"&refresh_token={enums.refresh_token}"
+        f"&client_id={enums.clientId}")
+    response = requests.post(url=enums.tokenUrl, headers=enums.headers, data=body)
+    enums.token_resp = parse_response(response.content)
+
+
 def parse_response(resp):
     data = str(resp).split(",")
     token = data[0].removeprefix("b'{\"access_token\":\"").removesuffix('"')
@@ -102,10 +112,28 @@ def parse_response(resp):
     return resp_json
 
 
+def cache_token(token):
+    try:
+        os.remove("cache.txt")
+    except FileNotFoundError as Error:
+        print(f"Initial creation of cache.txt | Error: {Error}")
+    with open('cache.txt', 'w') as f:
+        f.write(
+            f'{token}')
+        f.close()
+    return
+
+
 def auth():
     create_enums()
-    gen_verifier()
-    gen_challenge()
-    get_code()
-    get_token()
+    try:
+        with open('cache.txt', 'r') as f:
+            enums.refresh_token = f.read()
+        refresh_token()
+    except FileNotFoundError:
+        gen_verifier()
+        gen_challenge()
+        get_code()
+        get_token()
+    cache_token(enums.token_resp[2])
     return enums.token_resp[0]

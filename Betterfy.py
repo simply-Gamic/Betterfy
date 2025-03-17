@@ -36,6 +36,21 @@ def check_following_playlist(token, id):
     return check
 
 
+def check_saved_album(token, ids): #ids = max 20
+    if len(ids) > 20:
+        print("Error: Can only check 20 albums at a time")
+        return
+    else:
+        uri = str(ids).removeprefix("(").removesuffix(")")
+        check = requests.get(f'https://api.spotify.com/v1/me/albums/contains?ids={uri}', headers=create_header(token), stream=True)
+        return check
+
+
+def get_new_release(token, limit, offset): #limit = min1/max50/default20 | offset = default0
+    releases = requests.get(f'https://api.spotify.com/v1/browse/new-releases?limit={limit}&offset={offset}', headers=create_header(token), stream=True)
+    return releases
+
+
 def get_top(token, kind, time, limit, offset): #kind = artists/tracks | limit = min1/max50/default 20 | offset = default 0 | time = long/medium/short_term
     top = requests.get(f'https://api.spotify.com/v1/me/top/{kind}', headers=create_header(token), stream=True).json()
     return top
@@ -52,9 +67,35 @@ def current_track(token):
     return track
 
 
+def current_trackId(token):
+    track = requests.get('https://api.spotify.com/v1/me/player', headers=create_header(token), stream=True).json()
+    track_id = track['item']['id']
+    return track_id
+
+
 def get_track(token, id):
     track = requests.get(f'https://api.spotify.com/v1/tracks/{id}', headers=create_header(token), stream=True).json()
     return track
+
+
+def get_top_tracks(token, id):
+    tracks = requests.get(f'https://api.spotify.com/v1/artists/{id}/top-tracks', headers=create_header(token), stream=True).json()
+    return tracks
+
+
+def get_album(token, id):
+    album = requests.get(f'https://api.spotify.com/v1/albums/{id}', headers=create_header(token), stream=True).json()
+    return album
+
+
+def get_artist(token, id):
+    artist = requests.get(f'https://api.spotify.com/v1/artists/{id}', headers=create_header(token), stream=True).json()
+    return artist
+
+
+def get_category(token, id, locale): #locale = ISO 639-1 language code and an ISO 3166-1 alpha-2 country code
+    category = requests.get(f'https://api.spotify.com/v1/browse/categories/{id}?locale={locale}', headers=create_header(token), stream=True).json()
+    return category
 
 
 def get_tracks(token, ids): #max 50 ids
@@ -65,6 +106,26 @@ def get_tracks(token, ids): #max 50 ids
         uri = str(ids).removeprefix("(").removesuffix(")")
         tracks = requests.get(f'https://api.spotify.com/v1/tracks?ids={uri}', headers=create_header(token), stream=True).json()
         return tracks
+
+
+def get_albums(token, ids): #max 20 ids
+    if len(ids) > 20:
+        print("Error: Can only get 20 albums at a time")
+        return
+    else:
+        uri = str(ids).removeprefix("(").removesuffix(")")
+        albums = requests.get(f'https://api.spotify.com/v1/albums?ids={uri}', headers=create_header(token), stream=True).json()
+        return albums
+
+
+def get_artists(token, ids): #max 50 ids
+    if len(ids) > 20:
+        print("Error: Can only get 50 artists at a time")
+        return
+    else:
+        uri = str(ids).removeprefix("(").removesuffix(")")
+        artists = requests.get(f'https://api.spotify.com/v1/artists?ids={uri}', headers=create_header(token), stream=True).json()
+        return artists
 
 
 def check_saved_tracks(token, ids): #max 50ids
@@ -80,6 +141,32 @@ def check_saved_tracks(token, ids): #max 50ids
 def get_saved_tracks(token, limit, offset): #limit = min1/max50/default20 | offset = default0
     tracks = requests.get(f'https://api.spotify.com/v1/me/tracks?offset={offset}&limit={limit}', headers=create_header(token), stream=True).json()
     return tracks
+
+
+def get_saved_albums(token, limit, offset): #limit = min1/max50/default20 | offset = default0
+    albums = requests.get(f'https://api.spotify.com/v1/me/albums?limit={limit}&offset={offset}', headers=create_header(token), stream=True).json()
+    return albums
+
+
+def get_album_tracks(token, limit, offset, id): #limit = min1/max50/default20 | offset = default0
+    tracks = requests.get(f'https://api.spotify.com/v1/albums/{id}/tracks?limit={limit}&offset={offset}', headers=create_header(token), stream=True).json()
+    return tracks
+
+
+def get_artist_albums(token, limit, offset, id, groups): #limit = min1/max50/default20 | offset = default0 | groups = album/single/appears_on/compilation
+    albums = requests.get(f'https://api.spotify.com/v1/artists/{id}/albums?include_groups={groups}&limit={limit}&offset={offset}', headers=create_header(token), stream=True).json()
+    return albums
+
+
+def get_browse_categories(token, limit, offset, locale): #limit = min1/max50/default20 | offset = default0 | locale = ISO 639-1 language code and an ISO 3166-1 alpha-2 country code
+    categories = requests.get(f'https://api.spotify.com/v1/browse/categories?locale={locale}&limit={limit}&offset={offset}', headers=create_header(token), stream=True).json()
+    return categories
+
+
+def search(token, track, artist, type): #limit = min1/max50/default20 | offset = default0 | type = album/artist/playlist/track/show/episode/audiobook
+    q = f"query=track:{track}" + f"%252520artist:{artist}"
+    result = requests.get(f'https://api.spotify.com/v1/search?q={q}&type={type}', headers=create_header(token), stream=True).json()
+    return result
 
 
 #set
@@ -103,18 +190,23 @@ def pause(token):
     return
 
 
+def play(token):
+    requests.put('https://api.spotify.com/v1/me/player/play', headers=create_header(token), stream=True)
+    return
+
+
 def next(token):
-    requests.put('https://api.spotify.com/v1/me/player/next', headers=create_header(token), stream=True)
+    requests.post('https://api.spotify.com/v1/me/player/next', headers=create_header(token), stream=True)
     return
 
 
 def previous(token):
-    requests.put('https://api.spotify.com/v1/me/player/previous', headers=create_header(token), stream=True)
+    requests.post('https://api.spotify.com/v1/me/player/previous', headers=create_header(token), stream=True)
     return
 
 
 def queue_track(token, uri):
-    requests.put(f'https://api.spotify.com/v1/me/player/queue?uri=spotify%3Atrack%3A{uri}', headers=create_header(token), stream=True)
+    requests.post(f'https://api.spotify.com/v1/me/player/queue?uri=spotify:track:{uri}', headers=create_header(token), stream=True)
     return
 
 
@@ -152,5 +244,20 @@ def follow(token, ids, kind, type): #ids = max 50 | kind = follow/unfollow | typ
         if kind == "unfollow":
             requests.delete(f'https://api.spotify.com/v1/me/following?type={type}&ids={uri}', headers=create_header(token), stream=True)
             return
+
+
+def save_album(token, ids, kind): #ids = max 20 | kind = follow/unfollow
+    if len(ids) > 20:
+        print("Error: Can only save 20 albums at a time")
+        return
+    else:
+        uri = str(ids).removeprefix("(").removesuffix(")")
+        if kind == "follow":
+            requests.put(f'https://api.spotify.com/v1/me/albums?ids={uri}', headers=create_header(token), stream=True)
+            return
+        if kind == "unfollow":
+            requests.delete(f'https://api.spotify.com/v1/me/albums?ids={uri}', headers=create_header(token), stream=True)
+            return
+
 
 
