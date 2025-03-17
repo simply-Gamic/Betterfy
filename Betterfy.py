@@ -140,10 +140,9 @@ def check_saved_tracks(token, ids): #max 50ids
 
 def get_saved_tracks(token, limit, offset): #limit = min1/max50/default20 | offset = default0
     tracks = requests.get(f'https://api.spotify.com/v1/me/tracks?offset={offset}&limit={limit}', headers=create_header(token), stream=True).json()
-    track_list = f"{tracks["items"][0]["track"]["name"]} | {tracks["items"][0]["track"]["artists"][0]["name"]}"
-    for _ in range(limit - 1):
-        _ += 1
-        track_list += f", {tracks["items"][_]["track"]["name"]} | {tracks["items"][_]["track"]["artists"][0]["name"]}"
+    track_list = []
+    for _ in range(limit):
+        track_list.append(f"{tracks["items"][_]["track"]["name"]} | {tracks["items"][_]["track"]["artists"][0]["name"]}")
     return track_list
 
 
