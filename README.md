@@ -38,19 +38,49 @@ Some of the bigger ideas I have for this project:
 Track what I'm currently working on [here](https://github.com/users/simply-Gamic/projects/1/views/1)
 
 ## Example
-Really barebones use of the library to first log in to the Spotify API on behalf of a user with the default Oauth flow and default scopes. Then it continously prints out the current song position of the currently playing song.
+Really barebones use of the library to do some simple calls to the API.
 
 ```python
-import Spotify
+import Betterfy
 
-# setup Spotify instance 
-Credentials = '{ "client_id":"YOUR_APP_ID", "state":"GENERATED_SAFETY_STRING"}'
-Spotify = Spotify(Oauth=Default, cred=Credentials, scopes=Default)
+# Get API token 
+token = Betterfy.authenticate()
 
-# print out song position
-while True:
-    print("Song position: " + Spotify.playback.position, end="\r")
+# print out name of currently playing song
+print(f"Song name: {Betterfy.current_trackname(token)}")
+```
+Output:
+```
+Song name: songtitle
+```
+<br/>
+<br/>
 
+```python
+import Betterfy
+
+# Get API token 
+token = Betterfy.authenticate()
+
+# print out last 5 saved songs of the user, skipping the newest 10 --> so song number 10 to 15 from the users saved songs
+print(Betterfy.get_saved_tracks(token, limit=5, offset=10))
+```
+
+Output:
+```
+songtitle | artist, songtitle | artist, songtitle | artist, songtitle | artist, songtitle | artist
+```
+<br/>
+<br/>
+
+```python
+import Betterfy
+
+# Get API token 
+token = Betterfy.authenticate()
+
+# skip to the next song
+Betterfy.next(token)
 ```
 
 ## Documentation
