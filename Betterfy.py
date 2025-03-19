@@ -80,7 +80,7 @@ def get_track(token: str, id: str):
     return track
 
 
-def get_progress(token):
+def get_progress(token: str):
     track = current_track(token)
     return int(track["progress_ms"]) / int(track["item"]["duration_ms"])
 
@@ -228,7 +228,7 @@ def get_user_playlists(token: str, id: str, limit: _limit = 20, offset=0):
 
 #set
 def set_volume(token: str, vol: int): #percentage
-    return requests.put(f'https://api.spotify.com/v1/me/player/volume?volume_percent={str(vol)}', headers=create_header(token), stream=True)
+    return requests.put(f'https://api.spotify.com/v1/me/player/volume?volume_percent={int(vol)}', headers=create_header(token), stream=True)
 
 
 def set_shuffle(token: str, state: bool): #true or false

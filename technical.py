@@ -57,3 +57,8 @@ def update_token():
         enums.token = Betterfy.authenticate()
         time.sleep(3500)
         print(f"Token Updated. New one: {enums.token}")
+
+
+def volume(value):
+    token = enums.token
+    Betterfy.set_volume(token, value)

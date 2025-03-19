@@ -4,7 +4,7 @@ import tkinter
 import enums
 import Betterfy
 import customtkinter as ctk
-from technical import check_resource, create_resource, song, update_token
+from technical import check_resource, create_resource, song, update_token, volume
 
 
 # general settings
@@ -15,7 +15,7 @@ ctk.set_default_color_theme("green")
 app = ctk.CTk()
 app.geometry("720x480")
 app.title("Betterfy")
-app.iconbitmap('spotify_black_logo_icon_147079.ico')
+#app.iconbitmap('spotify_black_logo_icon_147079.ico')
 
 
 def run():
@@ -23,10 +23,14 @@ def run():
     token = Betterfy.authenticate()
     title.configure(text=f"Welcome: \n{Betterfy.get_profile(token)["display_name"]}")
     current.pack(padx=20, pady=50)
+    slider.pack(pady=20)
     t1 = threading.Thread(target=track)
     t2 = threading.Thread(target=update_token)
     t1.start()
     t2.start()
+    for thread in threading.enumerate():
+        print(thread.name)
+
 
 def create():
     create_resource(entry_ID.get(), scope_box.get(0, 10))
@@ -39,6 +43,8 @@ def create():
 def song_button(value):
     song(value)
     next.set(value="None")
+
+
 
 # adding UI
 title = ctk.CTkLabel(app, text="Resource file not found! \n Please give your credentials")
@@ -64,7 +70,8 @@ device = ctk.StringVar(value=None)
 progressbar = ctk.CTkProgressBar(app, orientation="horizontal", progress_color="green")
 current = ctk.CTkLabel(app, textvariable=name)
 device_label = ctk.CTkLabel(app, textvariable=device)
-
+slider = ctk.CTkSlider(app, from_=0, to=100, command=volume)
+slider.set(output_value=100)
 
 
 def main():
@@ -80,6 +87,7 @@ def main():
         progressbar.pack()
         device_label.pack(pady=50)
         next.pack()
+        slider.pack(pady=20)
         t1 = threading.Thread(target=track)
         t2 = threading.Thread(target=update_token)
         t1.start()
@@ -87,7 +95,6 @@ def main():
         for thread in threading.enumerate():
             print(thread.name)
         app.mainloop()
-
 
 
 def track():
