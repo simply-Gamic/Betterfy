@@ -80,6 +80,11 @@ def get_track(token: str, id: str):
     return track
 
 
+def get_progress(token):
+    track = current_track(token)
+    return int(track["progress_ms"]) / int(track["item"]["duration_ms"])
+
+
 #def get_audio_feautures(token, id): #currently not available because spotify is a greedy company and terminated access to these endpoints
     #feautures = requests.get(f'https://api.spotify.com/v1/audio-features/{id}', headers=create_header(token), stream=True).json()
     #return feautures
