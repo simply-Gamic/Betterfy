@@ -7,10 +7,8 @@ import enums
 def check_resource():
     try:
         with open('Resource.json', 'r') as f:
-            print("Resources found")
             return True
     except FileNotFoundError:
-        print("Resource.json not found. Creation will be started")
         return False
 
 

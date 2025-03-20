@@ -5,7 +5,7 @@ import enums
 import Betterfy
 import customtkinter as ctk
 from technical import check_resource, create_resource, song, update_token, volume
-
+from urlimage import CTkUrlLabel, url_to_color
 
 # general settings
 ctk.set_appearance_mode("Dark")
@@ -72,6 +72,7 @@ current = ctk.CTkLabel(app, textvariable=name)
 device_label = ctk.CTkLabel(app, textvariable=device)
 slider = ctk.CTkSlider(app, from_=0, to=100, command=volume)
 slider.set(output_value=100)
+image_label = CTkUrlLabel(app, compound="center", text="", url="", url_image_size=(200, 200))
 
 
 def main():
@@ -83,6 +84,7 @@ def main():
         entry_ID.destroy()
         button.destroy()
         title.configure(text=f"Welcome: \n{Betterfy.get_profile(enums.token)["display_name"]}", pady=100)
+        image_label.pack()
         current.pack(padx=20, pady=5)
         progressbar.pack()
         device_label.pack(pady=50)
@@ -98,11 +100,17 @@ def main():
 
 
 def track():
+    img_old = ""
     while True:
         token = enums.token
         progressbar.set(Betterfy.get_progress(token))
         track = Betterfy.current_track(token)
-        name.set(f"Currently playing: \n{track["item"]["name"]} | {track["item"]["artists"][0]["name"]}")
+        img = track["item"]["album"]["images"][0]["url"]
+        if img != img_old:
+            image_label.configure(url=img)
+            app.configure(fg_color=url_to_color(img))
+            img_old = img
+        name.set(f"{track["item"]["name"]} | {track["item"]["artists"][0]["name"]}")
         device.set(f"On device: \n{track["device"]["name"]}")
         time.sleep(0.1)
 
