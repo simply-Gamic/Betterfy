@@ -1,3 +1,4 @@
+"""A collection of functions aimed to interact with the Spotify API."""
 import requests
 from authflow import auth
 from literals import _limit, _state, _type, _kind, _typeu, _kindt, _groups, _time, _kindto
@@ -5,16 +6,31 @@ from img_encoder import encode
 
 
 def authenticate():
+    r"""Initializes the authentication flow and requests the user to authorize your app.
+
+        :returns: A valid user token for the Spotify API.
+        """
     return auth()
 
 
 def create_header(token: str):
+    r"""Creates a header to send with the Spotify API calls.
+
+        :param token: The token of the user required to access the Spotify API.
+        :return: The header.
+        """
     header = {"Authorization": "Bearer " + f"{token}"}
     return header
 
 
 #get
-def get_profile(token: str, id: str = None): #if no id is given get current users profile
+def get_profile(token: str, id: str = None):
+    r"""Gets the profile of a user.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param id: ID of the user you want the profile of. If none is given, gets the current users profile.
+        :return: JSON response.
+        """
     if id is None:
         profile = requests.get('https://api.spotify.com/v1/me', headers=create_header(token), stream=True).json()
         return profile
@@ -24,6 +40,13 @@ def get_profile(token: str, id: str = None): #if no id is given get current user
 
 
 def check_following(token: str, ids: list, type: _typeu): #ids = max 50
+    r"""Checks if the user is following a User/Artist.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param ids: List of User/Artist IDs. A max of 50 can be provided
+        :param type: The type of ID to check.
+        :return: JSON response.
+        """
     if len(ids) > 50:
         print("Error: Can only check 50 artists/users at a time")
         return
@@ -34,11 +57,23 @@ def check_following(token: str, ids: list, type: _typeu): #ids = max 50
 
 
 def check_following_playlist(token: str, id: str):
+    r"""Checks if user is following the playlist.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param id: The ID of the playlist to check.
+        :return: JSON response.
+        """
     check = requests.get(f'https://api.spotify.com/v1/playlists/{id}/followers/contains', headers=create_header(token), stream=True)
     return check
 
 
 def check_saved_album(token: str, ids: list): #ids = max 20
+    r"""Checks if the user saved an Album.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param ids: List of Album IDs. A max of 20 can be provided
+        :return: JSON response.
+        """
     if len(ids) > 20:
         print("Error: Can only check 20 albums at a time")
         return
@@ -48,7 +83,14 @@ def check_saved_album(token: str, ids: list): #ids = max 20
         return check
 
 
-def get_new_release(token: str, limit: _limit = 20, offset=0): #limit = min1/max50
+def get_new_release(token: str, limit: _limit = 20, offset = 0): #limit = min1/max50
+    r"""Gets the new releases for a user.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param limit: Number of releases to show.
+        :param offset: Where to begin in the list of new releases.
+        :return: JSON response.
+        """
     releases = requests.get(f'https://api.spotify.com/v1/browse/new-releases?limit={limit}&offset={offset}', headers=create_header(token), stream=True)
     return releases
 
@@ -59,28 +101,54 @@ def get_top(token: str, kind: _kindto, time: _time = "medium_term", limit: _limi
 
 
 def current_trackname(token: str):
+    r"""Gets the currently playing track name.
+
+        :param token: The token of the user required to access the Spotify API.
+        :return: String with name.
+        """
     track = requests.get('https://api.spotify.com/v1/me/player', headers=create_header(token), stream=True).json()
     track_name = track['item']['name']
     return track_name
 
 
 def current_track(token: str):
+    r"""Gets the currently playing track as JSON.
+
+        :param token: The token of the user required to access the Spotify API.
+        :return: JSON response.
+        """
     track = requests.get('https://api.spotify.com/v1/me/player', headers=create_header(token), stream=True).json()
     return track
 
 
 def current_trackId(token: str):
+    r"""Gets the trackID of the currently playing track.
+
+        :param token: The token of the user required to access the Spotify API.
+        :return: String with ID.
+        """
     track = requests.get('https://api.spotify.com/v1/me/player', headers=create_header(token), stream=True).json()
     track_id = track['item']['id']
     return track_id
 
 
 def get_track(token: str, id: str):
+    r"""Gets a specific track as JSON.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param id: TrackID of the specified track.
+        :return: JSON response.
+        """
     track = requests.get(f'https://api.spotify.com/v1/tracks/{id}', headers=create_header(token), stream=True).json()
     return track
 
 
 def get_progress(token: str):
+    r"""Gets the progress of the currently playing track represented as 0 to 1.
+
+        :param token: The token of the user required to access the Spotify API.
+        :return: int (0 is the start of the track and 1 is the end).
+        """
     track = current_track(token)
     return int(track["progress_ms"]) / int(track["item"]["duration_ms"])
 
@@ -104,11 +172,23 @@ def get_top_tracks(token: str, id: str, limit: _limit = 20):
 
 
 def get_album(token: str, id: str):
+    r"""Gets the specified Album as JSON.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param id: The ID of the album.
+        :return: JSON response.
+        """
     album = requests.get(f'https://api.spotify.com/v1/albums/{id}', headers=create_header(token), stream=True).json()
     return album
 
 
 def get_artist(token: str, id: str):
+    r"""Gets the artist specified as JSON.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param ids: The ID of the artist.
+        :return: JSON response.
+        """
     artist = requests.get(f'https://api.spotify.com/v1/artists/{id}', headers=create_header(token), stream=True).json()
     return artist
 
@@ -118,7 +198,13 @@ def get_category(token: str, id: str, locale: str): #locale = ISO 639-1 language
     return category
 
 
-def get_tracks(token: str, ids: list): #max 50 ids
+def get_tracks(token: str, ids: list):
+    r"""Gets tracks as JSON.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param ids: List of track IDs. A max of 50 can be provided.
+        :return: JSON response.
+        """
     if len(ids) > 50:
         print("Error: Can only get 50 tracks at a time")
         return
@@ -128,7 +214,13 @@ def get_tracks(token: str, ids: list): #max 50 ids
         return tracks
 
 
-def get_albums(token: str, ids: list): #max 20 ids
+def get_albums(token: str, ids: list):
+    r"""Gets albums as JSON.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param ids: List of album IDs. A max of 20 can be provided
+        :return: JSON response.
+        """
     if len(ids) > 20:
         print("Error: Can only get 20 albums at a time")
         return
@@ -138,7 +230,13 @@ def get_albums(token: str, ids: list): #max 20 ids
         return albums
 
 
-def get_artists(token: str, ids: list): #max 50 ids
+def get_artists(token: str, ids: list):
+    r"""Gets artists as JSON.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param ids: List of artist IDs. A max of 50 can be provided
+        :return: JSON response.
+        """
     if len(ids) > 50:
         print("Error: Can only get 50 artists at a time")
         return
@@ -148,7 +246,13 @@ def get_artists(token: str, ids: list): #max 50 ids
         return artists
 
 
-def check_saved_tracks(token: str, ids: list): #max 50ids
+def check_saved_tracks(token: str, ids: list):
+    r"""Checks if tracks are saved.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param ids: List of track IDs. A max of 50 can be provided
+        :return: JSON response.
+        """
     if len(ids) > 50:
         print("Error: Can only check 50 tracks at a time")
         return
@@ -158,7 +262,14 @@ def check_saved_tracks(token: str, ids: list): #max 50ids
         return check
 
 
-def get_saved_tracks(token: str, limit: _limit = 20, offset=0): #limit = min1/max50
+def get_saved_tracks(token: str, limit: _limit = 20, offset=0):
+    r"""Gets the last saved tracks as JSON.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param limit: How many tracks to get. min of 1 and max of 50.
+        :param offset: Where in the list of tracks to begin.
+        :return: JSON response.
+        """
     tracks = requests.get(f'https://api.spotify.com/v1/me/tracks?offset={offset}&limit={limit}', headers=create_header(token), stream=True).json()
     track_list = []
     for _ in range(limit):
@@ -227,37 +338,73 @@ def get_user_playlists(token: str, id: str, limit: _limit = 20, offset=0):
 
 
 #set
-def set_volume(token: str, vol: int): #percentage
+def set_volume(token: str, vol: int):
+    r"""Sets the volume of the player.
+
+            :param token: The token of the user required to access the Spotify API.
+            :param vol: The volume from 0 to 100.
+            """
     return requests.put(f'https://api.spotify.com/v1/me/player/volume?volume_percent={int(vol)}', headers=create_header(token), stream=True)
 
 
-def set_shuffle(token: str, state: bool): #true or false
+def set_shuffle(token: str, state: bool):
+    r"""Enables/Disables shuffle mode.
+
+            :param token: The token of the user required to access the Spotify API.
+            :param state: False/True.
+            """
     return requests.put(f'https://api.spotify.com/v1/me/player/shuffle?state={str(state)}', headers=create_header(token), stream=True)
 
 
 def set_repeat(token: str, state: _state):
+    r"""Sets the repeat mode.
+
+            :param token: The token of the user required to access the Spotify API.
+            :param state: The repeat mode that's wanted.
+            """
     return requests.put(f'https://api.spotify.com/v1/me/player/repeat?state={state}', headers=create_header(token), stream=True)
 
 
 def pause(token: str):
+    r"""Pauses the player..
+
+            :param token: The token of the user required to access the Spotify API.
+            """
     return requests.put('https://api.spotify.com/v1/me/player/pause', headers=create_header(token), stream=True)
 
 
 def play(token: str):
+    r"""Sets the player status to play..
+
+            :param token: The token of the user required to access the Spotify API.
+            """
     return requests.put('https://api.spotify.com/v1/me/player/play', headers=create_header(token), stream=True)
 
 
 def next(token: str):
+    r"""Plays the next song.
+
+            :param token: The token of the user required to access the Spotify API.
+            """
     requests.post('https://api.spotify.com/v1/me/player/next', headers=create_header(token), stream=True)
     return
 
 
 def previous(token: str):
+    r"""Plays the previous song.
+
+            :param token: The token of the user required to access the Spotify API.
+            """
     requests.post('https://api.spotify.com/v1/me/player/previous', headers=create_header(token), stream=True)
     return
 
 
 def queue_track(token: str, uri: str):
+    r"""Adds a track to the queue.
+
+            :param token: The token of the user required to access the Spotify API.
+            :param uri: The uri of a track.
+            """
     requests.post(f'https://api.spotify.com/v1/me/player/queue?uri=spotify:track:{uri}', headers=create_header(token), stream=True)
     return
 
@@ -313,15 +460,35 @@ def save_album(token: str, ids: list, kind: _kind): #ids = max 20
 
 
 def create_playlist(token: str, id: str, data: dict):
+    r"""Creates a playlist.
+
+            :param token: The token of the user required to access the Spotify API.
+            :param id: The playlist ID.
+            :param data: The deailts of the playlist in JSON form (name, description etc.)
+            :returns: The ID of the newly created playlist.
+            """
     r = requests.post(f'https://api.spotify.com/v1/users/{id}/playlists', json=data, headers=create_header(token), stream=True)
     return r.json()["id"]
 
 
 def change_playlist(token: str, id: str, data: dict):
+    r"""Changes the details of a playlist.
+
+            :param token: The token of the user required to access the Spotify API.
+            :param id: The playlist ID.
+            :param data: The changes to the playlist in JSON form.
+            """
     requests.put(f'https://api.spotify.com/v1/playlists/{id}', json=data, headers=create_header(token),stream=True)
 
 
 def add_song_playlist(token: str, id: str, urilist: list, pos: str = 0):
+    r"""Adds songs to a playlist.
+
+            :param token: The token of the user required to access the Spotify API.
+            :param id: The playlist ID.
+            :param urilist: A list containing track IDs. Max of 100 IDs
+            :param pos: Which position in the playlist the songs should be added. If None then they get added at the top.
+            """
     uris = f"spotify:track:{urilist[0]}"
     if 0 < len(urilist) < 100:
         for _ in range(len(urilist)-1):
@@ -332,6 +499,12 @@ def add_song_playlist(token: str, id: str, urilist: list, pos: str = 0):
 
 
 def remove_song_playlist(token: str, id: str, urilist: list):
+    r"""Removes songs from a playlist.
+
+            :param token: The token of the user required to access the Spotify API.
+            :param id: The playlist ID.
+            :param urilist: A list containing track IDs. Max of 100 IDs
+            """
     data = {"tracks": []}
     if 0 < len(urilist) < 100:
         for _ in range(len(urilist)):
@@ -342,6 +515,12 @@ def remove_song_playlist(token: str, id: str, urilist: list):
 
 
 def get_playlist(token: str, id: str):
+    r"""Gets an playlist as JSON.
+
+            :param token: The token of the user required to access the Spotify API.
+            :param id: The playlist ID.
+            :return: JSON response.
+            """
     return requests.get(f'https://api.spotify.com/v1/playlists/{id}', headers=create_header(token), stream=True).json()
 
 
@@ -359,10 +538,23 @@ def get_playlist_tracks(token: str, id: str, limit: _limit = 20, offset=0): #lim
 
 
 def get_playlist_cover(token: str, id: str):
+    r"""Gets the cover of a playlist.
+
+            :param token: The token of the user required to access the Spotify API.
+            :param id: The playlist ID.
+            :return: JSON response.
+            """
     return requests.get(f'https://api.spotify.com/v1/playlists/{id}/images', headers=create_header(token), stream=True).json()
 
 
 def add_playlist_cover(token: str, id: str, img_path: str):
+    r"""Adds a cover to a playlist.
+
+            :param token: The token of the user required to access the Spotify API.
+            :param id: The playlist ID.
+            :param img_path: The path to the image which should be used as the cover.
+            :return: JSON response.
+            """
     header = create_header(token)
     header.update({"Content-Type": "image/jpeg; charset=utf-8"})
     return requests.put(f'https://api.spotify.com/v1/playlists/{id}/images', data=encode(img_path), headers=header, stream=True)

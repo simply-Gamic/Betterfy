@@ -1,3 +1,5 @@
+r"""A module designed to interact with images from a URL and use them in CTK.
+        """
 import numpy
 from customtkinter import CTkLabel, CTkFont, CTkImage
 from requests import get as get_from
@@ -6,6 +8,11 @@ from io import BytesIO
 
 
 def url_to_color(url):
+    r"""Converts an image into an RGB color value of it's most common color.
+
+            :param url: The url of the image.
+            :returns: String with the RGB value.
+            """
     im = open_img(get_from(url, stream=True).raw)
     avg_color_per_row = numpy.average(im, axis=0)
     avg_color = numpy.average(avg_color_per_row, axis=0)

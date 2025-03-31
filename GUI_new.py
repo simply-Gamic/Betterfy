@@ -28,8 +28,6 @@ def run():
     t2 = threading.Thread(target=update_token)
     t1.start()
     t2.start()
-    for thread in threading.enumerate():
-        print(thread.name)
 
 
 def create():
@@ -75,6 +73,7 @@ slider.set(output_value=100)
 image_label = CTkUrlLabel(app, compound="center", text="", url="", url_image_size=(200, 200))
 
 
+
 def main():
     if not check_resource():
         app.mainloop()
@@ -94,24 +93,25 @@ def main():
         t2 = threading.Thread(target=update_token)
         t1.start()
         t2.start()
-        for thread in threading.enumerate():
-            print(thread.name)
         app.mainloop()
 
 
 def track():
     img_old = ""
+    track_old = None
     while True:
         token = enums.token
         progressbar.set(Betterfy.get_progress(token))
         track = Betterfy.current_track(token)
         img = track["item"]["album"]["images"][0]["url"]
+        if track != track_old:
+            name.set(f"{track["item"]["name"]} | {track["item"]["artists"][0]["name"]}")
+            device.set(f"On device: \n{track["device"]["name"]}")
         if img != img_old:
+            color = url_to_color(img)
             image_label.configure(url=img)
-            app.configure(fg_color=url_to_color(img))
+            app.configure(fg_color=color, require_redraw=True)
             img_old = img
-        name.set(f"{track["item"]["name"]} | {track["item"]["artists"][0]["name"]}")
-        device.set(f"On device: \n{track["device"]["name"]}")
         time.sleep(0.1)
 
 
