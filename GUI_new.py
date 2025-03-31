@@ -21,7 +21,7 @@ app.title("Betterfy")
 def run():
     button.destroy()
     token = Betterfy.authenticate()
-    title.configure(text=f"Welcome: \n{Betterfy.get_profile(token)["display_name"]}")
+    title.configure(text=f"Welcome: \n{Betterfy.get_profile(token)['display_name']}")
     current.pack(padx=20, pady=50)
     slider.pack(pady=20)
     t1 = threading.Thread(target=track)
@@ -55,7 +55,7 @@ def song_button(value):
 
 
 # adding UI
-img = ctk.CTkImage(dark_image=(img("https://cdn-icons-png.flaticon.com/512/4397/4397522.png")))
+img = ctk.CTkImage(dark_image=(image("https://cdn-icons-png.flaticon.com/512/4397/4397522.png")))
 fs = ctk.CTkButton(app, command=fullscreen, text="", image=img, width=20)
 fs.pack(pady=10, padx=10, anchor=tkinter.NE)
 title = ctk.CTkLabel(app, text="Resource file not found! \n Please give your credentials")
@@ -95,7 +95,7 @@ def main():
         scope_box.destroy()
         entry_ID.destroy()
         button.destroy()
-        title.configure(text=f"Welcome: \n{Betterfy.get_profile(enums.token)["display_name"]}", pady=100)
+        title.configure(text=f"Welcome: \n{Betterfy.get_profile(enums.token)['display_name']}", pady=100)
         image_label.pack()
         current.pack(padx=20, pady=5)
         progressbar.pack()
@@ -118,8 +118,8 @@ def track():
         track = Betterfy.current_track(token)
         img = track["item"]["album"]["images"][0]["url"]
         if track != track_old:
-            name.set(f"{track["item"]["name"]} | {track["item"]["artists"][0]["name"]}")
-            device.set(f"On device: \n{track["device"]["name"]}")
+            name.set(f'{track["item"]["name"]} | {track["item"]["artists"][0]["name"]}')
+            device.set(f'On device: \n{track["device"]["name"]}')
         if img != img_old:
             color = url_to_color(img)
             image_label.configure(url=img)
