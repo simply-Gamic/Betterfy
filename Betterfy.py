@@ -277,12 +277,26 @@ def get_saved_tracks(token: str, limit: _limit = 20, offset=0):
     return track_list
 
 
-def get_saved_albums(token: str, limit: _limit = 20, offset=0): #limit = min1/max50
+def get_saved_albums(token: str, limit: _limit = 20, offset=0):
+    r"""Gets the last saved albums as JSON.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param limit: How many albums to get. min of 1 and max of 50.
+        :param offset: Where in the list of albums to begin.
+        :return: JSON response.
+        """
     albums = requests.get(f'https://api.spotify.com/v1/me/albums?limit={limit}&offset={offset}', headers=create_header(token), stream=True).json()
     return albums
 
 
-def get_album_tracks(token: str, id: str, limit: _limit = 20, offset=0): #limit = min1/max50
+def get_album_tracks(token: str, id: str, limit: _limit = 20, offset=0):
+    r"""Gets the tracks of an album as JSON.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param limit: How many tracks to get. min of 1 and max of 50.
+        :param offset: Where in the list of tracks to begin.
+        :return: JSON response.
+        """
     tracks = requests.get(f'https://api.spotify.com/v1/albums/{id}/tracks?limit={limit}&offset={offset}', headers=create_header(token), stream=True).json()
     return tracks
 
@@ -315,6 +329,13 @@ def search(token: str, track: str, artist: str, type: _type = "track", limit: _l
 
 
 def get_playlists(token: str, limit: _limit = 20, offset=0):
+    r"""Gets the last saved playlists with name and creator.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param limit: How many playlists to get. min of 1 and max of 50.
+        :param offset: Where in the list of playlists to begin.
+        :return: List with the names and creators of the playlists.
+        """
     if limit > 50 or limit <= 0:
         return "Can only show 50 playlists at once"
     else:
@@ -327,6 +348,14 @@ def get_playlists(token: str, limit: _limit = 20, offset=0):
 
 
 def get_user_playlists(token: str, id: str, limit: _limit = 20, offset=0):
+    r"""Gets the playlists of a user with name and creator.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param limit: How many playlists to get. min of 1 and max of 50.
+        :param offset: Where in the list of playlists to begin.
+        :param id: The user ID.
+        :return: List with the names and creators of the playlists.
+        """
     if limit > 50 or limit <= 0:
         return "Can only show 50 playlists at once"
     else:
@@ -409,7 +438,13 @@ def queue_track(token: str, uri: str):
     return
 
 
-def save_track(token: str, ids: list, kind: _kindt): #max 50ids
+def save_track(token: str, ids: list, kind: _kindt):
+    r"""Saves/Unsaves tracks from the users liked songs.
+
+        :param token: The token of the user required to access the Spotify API.
+        :param ids: The track IDs. Max of 50
+        :param kind: Specifies if you want to delete or add a track.
+        """
     if len(ids) > 50:
         print("Error: Can only save/delete 50 tracks at a time")
         return
