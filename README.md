@@ -16,7 +16,6 @@ Here's the app in action (well at least a really early barebones version of it) 
 ![gif](https://github.com/simply-Gamic/Betterfy/assets/80588359/9b364bfd-4ae4-474d-8d58-71ce633d41bb)
 
 ## To Do
-- Finish the authentication flow to be fully automatic
 - Migrate the basic UI I created (which can control Spotify through the WEB API) from html to a basic Tkinter UI
 - Integrate [T-vK's](https://github.com/T-vK/Beats4Wled) awesome work and get led lights via [WLED](https://github.com/Aircoookie/WLED) synced up to Spotify
 
@@ -85,7 +84,7 @@ Betterfy.next(token)
 ## Documentation
 
 For further documentation and information checkout the docs:
-[Wiki]() (coming as soon as I have a working barebones version....)
+[Wiki](https://github.com/simply-Gamic/Betterfy.wiki.git) (coming as soon as I have a working barebones version....)
 
 
 ## Contributing
