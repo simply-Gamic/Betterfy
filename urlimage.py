@@ -7,13 +7,17 @@ from PIL.Image import open as open_img
 from io import BytesIO
 
 
+def image(path):
+    return open_img(BytesIO(get_from(path, stream=True).content))
+
+
 def url_to_color(url):
     r"""Converts an image into an RGB color value of it's most common color.
 
             :param url: The url of the image.
             :returns: String with the RGB value.
             """
-    im = open_img(get_from(url, stream=True).raw)
+    im = image(url)
     avg_color_per_row = numpy.average(im, axis=0)
     avg_color = numpy.average(avg_color_per_row, axis=0)
     color = '#%02x%02x%02x' % (int(avg_color[0]), int(avg_color[1]), int(avg_color[2]))

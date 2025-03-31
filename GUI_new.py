@@ -5,7 +5,7 @@ import enums
 import Betterfy
 import customtkinter as ctk
 from technical import check_resource, create_resource, song, update_token, volume
-from urlimage import CTkUrlLabel, url_to_color
+from urlimage import CTkUrlLabel, url_to_color, image
 
 # general settings
 ctk.set_appearance_mode("Dark")
@@ -38,6 +38,16 @@ def create():
     button.configure(text="Run Application", command=run)
 
 
+def fullscreen():
+        fs.configure(command=normalscreen)
+        app.wm_attributes('-fullscreen', True)
+
+
+def normalscreen():
+        fs.configure(command=fullscreen)
+        app.wm_attributes('-fullscreen', False)
+
+
 def song_button(value):
     song(value)
     next.set(value="None")
@@ -45,6 +55,9 @@ def song_button(value):
 
 
 # adding UI
+img = ctk.CTkImage(dark_image=(img("https://cdn-icons-png.flaticon.com/512/4397/4397522.png")))
+fs = ctk.CTkButton(app, command=fullscreen, text="", image=img, width=20)
+fs.pack(pady=10, padx=10, anchor=tkinter.NE)
 title = ctk.CTkLabel(app, text="Resource file not found! \n Please give your credentials")
 title.pack(padx=10, pady=10)
 entry_ID = ctk.CTkEntry(textvariable=enums.id_gui, width=200, master=app, placeholder_text="App ID")
@@ -112,6 +125,8 @@ def track():
             image_label.configure(url=img)
             app.configure(fg_color=color, require_redraw=True)
             img_old = img
+        name.set(f'{track["item"]["name"]} | {track["item"]["artists"][0]["name"]}')
+        device.set(f'On device: \n{track["device"]["name"]}')
         time.sleep(0.1)
 
 

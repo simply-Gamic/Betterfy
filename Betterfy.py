@@ -167,7 +167,7 @@ def get_top_tracks(token: str, id: str, limit: _limit = 20):
     track_list = []
     for _ in range(limit):
         track_list.append(
-            f"{tracks["items"][_]["track"]["name"]} | {tracks["items"][_]["track"]["artists"][0]["name"]}")
+            f'{tracks["items"][_]["track"]["name"]} | {tracks["items"][_]["track"]["artists"][0]["name"]}')
     return track_list
 
 
@@ -273,7 +273,7 @@ def get_saved_tracks(token: str, limit: _limit = 20, offset=0):
     tracks = requests.get(f'https://api.spotify.com/v1/me/tracks?offset={offset}&limit={limit}', headers=create_header(token), stream=True).json()
     track_list = []
     for _ in range(limit):
-        track_list.append(f"{tracks["items"][_]["track"]["name"]} | {tracks["items"][_]["track"]["artists"][0]["name"]}")
+        track_list.append(f'{tracks["items"][_]["track"]["name"]} | {tracks["items"][_]["track"]["artists"][0]["name"]}')
     return track_list
 
 
@@ -324,7 +324,7 @@ def search(token: str, track: str, artist: str, type: _type = "track", limit: _l
         tracks = []
         for _ in range(len(result["tracks"]["items"])):
             tracks.append(
-                f"{result["tracks"]["items"][_]["name"]} | {result["tracks"]["items"][_]["artists"][0]["name"]}")
+                f'{result["tracks"]["items"][_]["name"]} | {result["tracks"]["items"][_]["artists"][0]["name"]}')
         return tracks
 
 
@@ -343,7 +343,7 @@ def get_playlists(token: str, limit: _limit = 20, offset=0):
                               headers=create_header(token), stream=True).json()
         playlists = []
         for _ in range(int(result["total"])):
-            playlists.append(f"{result["items"][_]["name"]} | {result["items"][_]["owner"]["display_name"]}")
+            playlists.append(f'{result["items"][_]["name"]} | {result["items"][_]["owner"]["display_name"]}')
         return playlists
 
 
@@ -362,7 +362,7 @@ def get_user_playlists(token: str, id: str, limit: _limit = 20, offset=0):
         result = requests.get(f'https://api.spotify.com/v1/users/{id}/playlists?limit={limit}&offset={offset}',headers=create_header(token), stream=True).json()
         playlists = []
         for _ in range(int(result["total"])):
-            playlists.append(f"{result["items"][_]["name"]} | {result["items"][_]["owner"]["display_name"]}")
+            playlists.append(f'{result["items"][_]["name"]} | {result["items"][_]["owner"]["display_name"]}')
         return playlists
 
 
