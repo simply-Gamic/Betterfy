@@ -84,7 +84,7 @@ Betterfy.next(token)
 ## Documentation
 
 For further documentation and information checkout the docs:
-[Wiki](https://github.com/simply-Gamic/Betterfy.wiki.git) (coming as soon as I have a working barebones version....)
+[Wiki]([https://github.com/simply-Gamic/Betterfy.wiki.git](https://github.com/simply-Gamic/Betterfy/wiki)) (coming as soon as I have a working barebones version....)
 
 
 ## Contributing
