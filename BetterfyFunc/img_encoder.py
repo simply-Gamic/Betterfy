@@ -1,5 +1,8 @@
+#  Copyright (c) 2025.
+
 from base64 import b64encode
 from os import path as p
+
 
 def encode(path: str):
     r"""Encodes a given image file into raw bytes that can be used by the Spotify API.
